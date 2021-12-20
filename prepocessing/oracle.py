@@ -11,7 +11,7 @@ class Oracle:
 
     def rouge2_precision(self, prediction, reference):
         return self.rouge_score.compute(
-            predictions=[prediction], references=[reference]
+            predictions=["\n".join(prediction)], references=["\n".join(reference)]
         )["rouge2"].mid.precision
 
     def oracle_sources_text(self, example):
