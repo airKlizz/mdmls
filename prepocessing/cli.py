@@ -24,7 +24,7 @@ def extractive_bert(
     output_file: str,
     model_checkpoint: str = "distilbert-base-multilingual-cased",
 ):
-    dataset = load_dataset("json", data_files={"split": data_file}, split="split[:10]")
+    dataset = load_dataset("json", data_files={"split": data_file}, split="split")
     ext = Extractive(model_checkpoint=model_checkpoint)
     new_dataset = ext.add_extractive_summary_to_dataset(dataset)
     new_dataset.to_json(output_file)
