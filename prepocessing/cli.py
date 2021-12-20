@@ -1,6 +1,7 @@
 import typer
 from .oracle import Oracle
 from .extractive import Extractive
+from .abstractive import Abstractive
 from datasets import load_dataset, load_metric
 from transformers import AutoTokenizer
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -27,6 +28,33 @@ def extractive_bert(
     dataset = load_dataset("json", data_files={"split": data_file}, split="split")
     ext = Extractive(model_checkpoint=model_checkpoint)
     new_dataset = ext.add_extractive_summary_to_dataset(dataset)
+    new_dataset.to_json(output_file)
+    typer.secho("Done", fg=typer.colors.GREEN, bold=True)
+
+
+@app.command()
+def abstractive_mt5(
+    data_file: str,
+    output_file: str,
+    model_checkpoint: str,
+    device: int = -1,
+    sources_text: str = "oracle_sources_text",
+    min_length: int = 200,
+    max_length: int = 512,
+    num_beams: int = 5,
+    no_repeat_ngram_size: int = 3,
+):
+    dataset = load_dataset("json", data_files={"split": data_file}, split="split")
+    abs = Abstractive(
+        model_checkpoint=model_checkpoint,
+        device=device,
+        sources_text=sources_text,
+        min_length=min_length,
+        max_length=max_length,
+        num_beams=num_beams,
+        no_repeat_ngram_size=no_repeat_ngram_size,
+    )
+    new_dataset = abs.add_abstractive_summary_to_dataset(dataset)
     new_dataset.to_json(output_file)
     typer.secho("Done", fg=typer.colors.GREEN, bold=True)
 
