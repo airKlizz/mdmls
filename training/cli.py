@@ -27,6 +27,7 @@ def run(
     weight_decay: float = 0.01,
     save_total_limit: int = 3,
     push_to_hub: bool = True,
+    language: str = None,
 ):
     tokenized_datasets = load_dataset(
         "json",
@@ -35,6 +36,13 @@ def run(
             "validation": list(validation_data_files),
         },
     )
+    if language:
+
+        def filter_by_language(example):
+            return example["language"] == language
+
+        tokenized_datasets = tokenized_datasets.filter(filter_by_language)
+
     metric = load_metric("rouge")
     model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
