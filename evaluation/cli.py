@@ -9,9 +9,18 @@ def rouge(
     data_file: str,
     predictions: str,
     references: str = "news",
+    language: str = None,
 ):
     metric = load_metric("rouge")
     dataset = load_dataset("json", data_files={"split": data_file}, split="split")
+
+    if language:
+
+        def filter_by_language(example):
+            return example["language"] == language
+
+        dataset = dataset.filter(filter_by_language)
+
     score = metric.compute(
         predictions=dataset[predictions], references=dataset[references]
     )
