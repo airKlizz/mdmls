@@ -1,6 +1,6 @@
 import typer
 from .oracle import Oracle
-from .extractive import Extractive
+from .extractive import Extractive, ExtractivePreAbstractive
 from .abstractive import Abstractive
 from datasets import load_dataset, load_metric
 from transformers import AutoTokenizer
@@ -24,9 +24,19 @@ def extractive_bert(
     data_file: str,
     output_file: str,
     model_checkpoint: str = "distilbert-base-multilingual-cased",
+    pre_abstractive: bool = False,
+    abstractive_model_checkpoint: bool = "google/mt5-small",
 ):
     dataset = load_dataset("json", data_files={"split": data_file}, split="split")
-    ext = Extractive(model_checkpoint=model_checkpoint)
+    ext = (
+        Extractive(model_checkpoint=model_checkpoint)
+        if not pre_abstractive
+        else ExtractivePreAbstractive(
+            extractive_model_checkpoint=model_checkpoint,
+            abstractive_model_checkpoint=abstractive_model_checkpoint,
+        )
+    )
+    typer.echo(f"Type of Extractive: {type(ext)}")
     new_dataset = ext.add_extractive_summary_to_dataset(dataset)
     new_dataset.to_json(output_file)
     typer.secho("Done", fg=typer.colors.GREEN, bold=True)

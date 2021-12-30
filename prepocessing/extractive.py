@@ -27,3 +27,56 @@ class Extractive:
 
     def add_extractive_summary_to_dataset(self, dataset):
         return dataset.map(self.extractive_summary)
+
+
+class ExtractivePreAbstractive:
+    def __init__(self, extractive_model_checkpoint, abstractive_model_checkpoint):
+        self.model_name = extractive_model_checkpoint.split("/")[-1]
+        custom_config = AutoConfig.from_pretrained(extractive_model_checkpoint)
+        custom_config.output_hidden_states = True
+        custom_tokenizer = AutoTokenizer.from_pretrained(extractive_model_checkpoint)
+        custom_model = AutoModel.from_pretrained(
+            extractive_model_checkpoint, config=custom_config
+        )
+        self.model = Summarizer(
+            custom_model=custom_model, custom_tokenizer=custom_tokenizer
+        )
+
+        self.abstractive_tokenizer = AutoTokenizer.from_pretrained(
+            abstractive_model_checkpoint
+        )
+
+    def summary_tok_len(self, summary):
+        return len(self.abstractive_tokenizer(summary)["input_ids"])
+
+    def extractive_summary(self, example):
+        text = example["sources_text"]
+        num_sentences = 11
+        summary = "\n".join(
+            sent_tokenize(self.model(text, num_sentences=num_sentences, min_length=60))
+        )
+        last_num_sentences = num_sentences
+        next_num_sentences = (
+            num_sentences + 1
+            if self.summary_tok_len(summary) <= 512
+            else num_sentences - 1
+        )
+        while last_num_sentences != next_num_sentences:
+            last_num_sentences = num_sentences
+            num_sentences = next_num_sentences
+            summary = "\n".join(
+                sent_tokenize(
+                    self.model(text, num_sentences=num_sentences, min_length=60)
+                )
+            )
+            next_num_sentences = (
+                num_sentences + 1
+                if self.summary_tok_len(summary) <= 512
+                else num_sentences - 1
+            )
+
+        example[f"{self.model_name}_extractive_summary"] = summary
+        return example
+
+    def add_extractive_summary_to_dataset(self, dataset):
+        return dataset.map(self.extractive_summary)
