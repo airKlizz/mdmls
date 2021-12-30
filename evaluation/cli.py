@@ -48,12 +48,25 @@ def rouge_multiple_methods(
     predictions: List[str] = typer.Option(None),
     reference: str = "news",
     language: str = None,
+    duplicated_columns: List[str] = [
+        "language",
+        "title",
+        "news",
+        "categories",
+        "sources",
+        "sources_text",
+        "oracle_sources_text",
+    ],
 ):
     metric = load_metric("rouge")
     dataset = concatenate_datasets(
         [
             load_dataset("json", data_files={"split": data_file}, split="split")
-            for data_file in data_files
+            if i == 0
+            else load_dataset(
+                "json", data_files={"split": data_file}, split="split"
+            ).remove_columns(duplicated_columns)
+            for i, data_file in enumerate(data_files)
         ],
         axis=1,
     )
