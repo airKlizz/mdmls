@@ -56,12 +56,26 @@ class ExtractivePreAbstractive:
             sent_tokenize(self.model(text, num_sentences=num_sentences, min_length=60))
         )
         last_num_sentences = num_sentences
+        last_summary_len = -1
+        summary_len = self.summary_tok_len(summary)
         next_num_sentences = (
-            num_sentences + 1
-            if self.summary_tok_len(summary) <= 512
-            else num_sentences - 1
+            num_sentences + 1 if summary_len <= 512 else num_sentences - 1
         )
-        while last_num_sentences != next_num_sentences:
+        while (
+            last_num_sentences != next_num_sentences and last_summary_len != summary_len
+        ):
+            print(
+                f"""\
+---
+Current summary len: {summary_len}
+Prev summary len: {last_summary_len}
+Nb of sentences: {num_sentences}
+Next nb of sentences: {next_num_sentences}
+Prev nb of sentences: {last_num_sentences}
+---\
+            """
+            )
+            last_summary_len = summary_len
             last_num_sentences = num_sentences
             num_sentences = next_num_sentences
             summary = "\n".join(
@@ -69,10 +83,9 @@ class ExtractivePreAbstractive:
                     self.model(text, num_sentences=num_sentences, min_length=60)
                 )
             )
+            summary_len = self.summary_tok_len(summary)
             next_num_sentences = (
-                num_sentences + 1
-                if self.summary_tok_len(summary) <= 512
-                else num_sentences - 1
+                num_sentences + 1 if summary_len <= 512 else num_sentences - 1
             )
 
         example[f"{self.model_name}_extractive_summary"] = summary
