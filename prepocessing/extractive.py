@@ -52,11 +52,12 @@ class ExtractivePreAbstractive:
     def extractive_summary(self, example):
         text = example["sources_text"]
         num_sentences = 11
+        last_num_sentences = num_sentences
+        last_summary_len = -1
+        last_summary = None
         summary = "\n".join(
             sent_tokenize(self.model(text, num_sentences=num_sentences, min_length=60))
         )
-        last_num_sentences = num_sentences
-        last_summary_len = -1
         summary_len = self.summary_tok_len(summary)
         next_num_sentences = (
             num_sentences + 1 if summary_len <= 512 else num_sentences - 1
@@ -76,6 +77,7 @@ Prev nb of sentences: {last_num_sentences}
             last_num_sentences = num_sentences
             num_sentences = next_num_sentences
             last_summary_len = summary_len
+            last_summary = summary
             summary = "\n".join(
                 sent_tokenize(
                     self.model(text, num_sentences=num_sentences, min_length=60)
@@ -102,7 +104,8 @@ Prev nb of sentences: {last_num_sentences}
 ---\
             """
         )
-        example[f"{self.model_name}_extractive_summary"] = summary
+        print(f"FINAL SUMMARY LEN = {self.summary_tok_len(last_summary)}")
+        example[f"{self.model_name}_extractive_summary"] = last_summary
         return example
 
     def add_extractive_summary_to_dataset(self, dataset):
