@@ -85,7 +85,7 @@ Prev nb of sentences: {last_num_sentences}
             )
             summary_len = self.summary_tok_len(summary)
             next_num_sentences = (
-                num_sentences + 1 if summary_len <= 512 else num_sentences - 1
+                num_sentences + 1 if summary_len <= 542 else num_sentences - 1
             )
             if (
                 last_num_sentences == next_num_sentences
