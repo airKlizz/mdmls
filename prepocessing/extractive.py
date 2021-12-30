@@ -87,9 +87,9 @@ Prev nb of sentences: {last_num_sentences}
             next_num_sentences = (
                 num_sentences + 1 if summary_len <= 542 else num_sentences - 1
             )
-            if (
-                last_num_sentences == next_num_sentences
-                or last_summary_len == summary_len
+            if last_num_sentences == next_num_sentences or (
+                last_summary_len == summary_len
+                and (last_num_sentences - num_sentences) < 0
             ):
                 break
 
@@ -103,6 +103,9 @@ Next nb of sentences: {next_num_sentences}
 Prev nb of sentences: {last_num_sentences}
 ---\
             """
+        )
+        final_summary = (
+            summary if (last_num_sentences - num_sentences) >= 0 else last_summary
         )
         print(f"FINAL SUMMARY LEN = {self.summary_tok_len(last_summary)}")
         example[f"{self.model_name}_extractive_summary"] = last_summary
