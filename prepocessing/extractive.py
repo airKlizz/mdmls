@@ -51,7 +51,7 @@ class ExtractivePreAbstractive:
 
     def extractive_summary(self, example):
         text = example["sources_text"]
-        num_sentences = 11
+        num_sentences = 16
         last_num_sentences = num_sentences
         last_summary_len = -1
         last_summary = None
