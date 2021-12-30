@@ -25,7 +25,7 @@ def extractive_bert(
     output_file: str,
     model_checkpoint: str = "distilbert-base-multilingual-cased",
     pre_abstractive: bool = False,
-    abstractive_model_checkpoint: bool = "google/mt5-small",
+    abstractive_model_checkpoint: str = "google/mt5-small",
 ):
     dataset = load_dataset("json", data_files={"split": data_file}, split="split")
     ext = (
