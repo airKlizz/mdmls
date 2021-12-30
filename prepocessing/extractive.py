@@ -61,9 +61,7 @@ class ExtractivePreAbstractive:
         next_num_sentences = (
             num_sentences + 1 if summary_len <= 512 else num_sentences - 1
         )
-        while (
-            last_num_sentences != next_num_sentences and last_summary_len != summary_len
-        ):
+        while True:
             print(
                 f"""\
 ---
@@ -87,6 +85,11 @@ Prev nb of sentences: {last_num_sentences}
             next_num_sentences = (
                 num_sentences + 1 if summary_len <= 512 else num_sentences - 1
             )
+            if (
+                last_num_sentences == next_num_sentences
+                or last_summary_len == summary_len
+            ):
+                break
 
         print(
             f"""\
