@@ -75,15 +75,15 @@ Prev nb of sentences: {last_num_sentences}
 ---\
             """
             )
+            last_num_sentences = num_sentences
+            num_sentences = next_num_sentences
+            last_summary_len = summary_len
             summary = "\n".join(
                 sent_tokenize(
                     self.model(text, num_sentences=num_sentences, min_length=60)
                 )
             )
-            last_summary_len = summary_len
             summary_len = self.summary_tok_len(summary)
-            last_num_sentences = num_sentences
-            num_sentences = next_num_sentences
             next_num_sentences = (
                 num_sentences + 1 if summary_len <= 512 else num_sentences - 1
             )
