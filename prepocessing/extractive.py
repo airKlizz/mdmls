@@ -107,8 +107,8 @@ Prev nb of sentences: {last_num_sentences}
         final_summary = (
             summary if (last_num_sentences - num_sentences) >= 0 else last_summary
         )
-        print(f"FINAL SUMMARY LEN = {self.summary_tok_len(last_summary)}")
-        example[f"{self.model_name}_extractive_summary"] = last_summary
+        print(f"FINAL SUMMARY LEN = {self.summary_tok_len(final_summary)}")
+        example[f"{self.model_name}_extractive_summary"] = final_summary
         return example
 
     def add_extractive_summary_to_dataset(self, dataset):
