@@ -51,7 +51,7 @@ class ExtractivePreAbstractive:
 
     def extractive_summary(self, example):
         text = example["sources_text"]
-        num_sentences = 16
+        num_sentences = 13
         last_num_sentences = num_sentences
         last_summary_len = -1
         last_summary = None
@@ -63,17 +63,6 @@ class ExtractivePreAbstractive:
             num_sentences + 1 if summary_len <= 512 else num_sentences - 1
         )
         while True:
-            print(
-                f"""\
----
-Current summary len: {summary_len}
-Prev summary len: {last_summary_len}
-Nb of sentences: {num_sentences}
-Next nb of sentences: {next_num_sentences}
-Prev nb of sentences: {last_num_sentences}
----\
-            """
-            )
             last_num_sentences = num_sentences
             num_sentences = next_num_sentences
             last_summary_len = summary_len
@@ -93,21 +82,25 @@ Prev nb of sentences: {last_num_sentences}
             ):
                 break
 
-        print(
-            f"""\
----
-Final summary len: {summary_len}
-Prev summary len: {last_summary_len}
-Final nb of sentences: {num_sentences}
-Next nb of sentences: {next_num_sentences}
-Prev nb of sentences: {last_num_sentences}
----\
-            """
-        )
         final_summary = (
             summary if (last_num_sentences - num_sentences) >= 0 else last_summary
         )
-        print(f"FINAL SUMMARY LEN = {self.summary_tok_len(final_summary)}")
+        final_num_sentences = (
+            num_sentences
+            if (last_num_sentences - num_sentences) >= 0
+            else last_num_sentences
+        )
+        final_len = self.summary_tok_len(final_summary)
+        if final_len < 452:
+            final_summary = "\n".join(
+                sent_tokenize(
+                    self.model(
+                        text, num_sentences=final_num_sentences + 1, min_length=60
+                    )
+                )
+            )
+            final_len = self.summary_tok_len(final_summary)
+        print(f"Summary length = {self.summary_tok_len(final_summary)}")
         example[f"{self.model_name}_extractive_summary"] = final_summary
         return example
 
