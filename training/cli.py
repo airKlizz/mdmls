@@ -28,6 +28,7 @@ def run(
     save_total_limit: int = 3,
     push_to_hub: bool = True,
     language: str = None,
+    max_number_training_sample: int = None,
 ):
     tokenized_datasets = load_dataset(
         "json",
@@ -94,7 +95,11 @@ def run(
     trainer = Seq2SeqTrainer(
         model,
         args,
-        train_dataset=tokenized_datasets["train"],
+        train_dataset=tokenized_datasets["train"]
+        if not max_number_training_sample
+        else tokenized_datasets["train"].select(
+            list(range(max_number_training_sample))
+        ),
         eval_dataset=tokenized_datasets["validation"],
         data_collator=data_collator,
         tokenizer=tokenizer,
