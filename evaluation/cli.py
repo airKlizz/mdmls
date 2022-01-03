@@ -43,6 +43,40 @@ def rouge(
 
 
 @app.command()
+def combine_dataset(
+    output_file: str,
+    data_files: List[str],
+    duplicated_columns: List[str] = [
+        "language",
+        "title",
+        "news",
+        "categories",
+        "sources",
+        "sources_text",
+        "oracle_sources_text",
+    ],
+):
+    def remove_columns(dataset, columns):
+        return dataset.remove_columns(
+            list(set(columns).intersection(dataset.column_names))
+        )
+
+    dataset = concatenate_datasets(
+        [
+            load_dataset("json", data_files={"split": data_file}, split="split")
+            if i == 0
+            else remove_columns(
+                load_dataset("json", data_files={"split": data_file}, split="split"),
+                duplicated_columns,
+            )
+            for i, data_file in enumerate(data_files)
+        ],
+        axis=1,
+    )
+    dataset.to_json(output_file)
+
+
+@app.command()
 def rouge_multiple_methods(
     data_files: List[str],
     predictions: List[str] = typer.Option(None),
