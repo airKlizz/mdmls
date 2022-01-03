@@ -208,6 +208,8 @@ def rouge_multiple_methods_multiple_languages(
                 return example["language"] == language
 
             temp_dataset = dataset.filter(filter_by_language)
+        else:
+            temp_dataset = dataset
 
         scores = {
             prediction: score_to_dict(
