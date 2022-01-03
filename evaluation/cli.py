@@ -44,8 +44,8 @@ def rouge(
 
 @app.command()
 def combine_dataset(
-    output_file: str,
     data_files: List[str],
+    output_file: str = "combined_dataset.json",
     duplicated_columns: List[str] = [
         "language",
         "title",
@@ -76,41 +76,6 @@ def combine_dataset(
         axis=1,
     )
     dataset.to_json(output_file)
-
-
-# mdmls evaluate combine-dataset \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-all-languages.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-english.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-french.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-german.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-italian.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-polish.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-portuguese.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-spanish.json
-
-# mdmls evaluate combine-dataset \
-#     ../hf_wikinewsum/test_with_predictions.json \
-#     ../hf_wikinewsum/test_with_xlm-roberta-base.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased.json \
-#     ../hf_wikinewsum/test_with_distilbert-base-multilingual-cased.json \
-#     ../hf_wikinewsum/test_with_oracle_sources_text.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_pre_abstractive.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-all-languages.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-english.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-french.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-german.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-italian.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-polish.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-portuguese.json \
-#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-spanish.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-all-languages.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-english.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-french.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-german.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-italian.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-polish.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-portuguese.json \
-#     ../hf_wikinewsum/test_with_mt5-base-wikinewssum-spanish.json
 
 
 @app.command()
