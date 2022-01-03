@@ -54,6 +54,7 @@ def combine_dataset(
         "sources",
         "sources_text",
         "oracle_sources_text",
+        "bert-base-multilingual-cased_extractive_summary",
     ],
 ):
     def remove_columns(dataset, columns):
@@ -76,6 +77,16 @@ def combine_dataset(
     )
     dataset.to_json(output_file)
 
+
+# mdmls evaluate combine-dataset \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-all-languages.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-english.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-french.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-german.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-italian.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-polish.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-portuguese.json \
+#     ../hf_wikinewsum/test_with_bert-base-multilingual-cased_mt5-base-wikinewssum-spanish.json
 
 # mdmls evaluate combine-dataset \
 #     ../hf_wikinewsum/test_with_predictions.json \
