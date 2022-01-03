@@ -156,7 +156,7 @@ def rouge_multiple_methods_multiple_languages(
     data_files: List[str],
     predictions: List[str] = typer.Option(None),
     reference: str = "news",
-    languages: list[str] = ["all", "en", "de", "fr", "es", "pl", "pt", "it"],
+    languages: List[str] = ["all", "en", "de", "fr", "es", "pl", "pt", "it"],
     duplicated_columns: List[str] = [
         "language",
         "title",
