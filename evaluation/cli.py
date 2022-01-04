@@ -182,6 +182,7 @@ def rouge_multiple_methods_multiple_languages(
     )
 
     if filter_cross_lingual:
+        print(dataset)
 
         def is_not_cross_lingual(example):
             news_lang = example["language"]
@@ -196,6 +197,7 @@ def rouge_multiple_methods_multiple_languages(
             return not cross_lingual
 
         dataset = dataset.filter(is_not_cross_lingual)
+        print(dataset)
 
     def score_to_dict(score):
         def per_rouge_name(s):
