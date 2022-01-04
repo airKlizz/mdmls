@@ -166,6 +166,7 @@ def rouge_multiple_methods_multiple_languages(
         "sources_text",
         "oracle_sources_text",
     ],
+    filter_cross_lingual: bool = False,
 ):
     metric = load_metric("rouge")
     dataset = concatenate_datasets(
@@ -179,6 +180,22 @@ def rouge_multiple_methods_multiple_languages(
         ],
         axis=1,
     )
+
+    if filter_cross_lingual:
+
+        def is_not_cross_lingual(example):
+            news_lang = example["language"]
+            sources_lang = list(
+                set([source["language"] for source in example["sources"]])
+            )
+            cross_lingual = (
+                False
+                if len(sources_lang) == 1 and sources_lang[0] == news_lang
+                else True
+            )
+            return not cross_lingual
+
+        dataset = dataset.filter(is_not_cross_lingual)
 
     def score_to_dict(score):
         def per_rouge_name(s):
