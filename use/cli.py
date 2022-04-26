@@ -6,8 +6,8 @@ app = typer.Typer()
 @app.command()
 def summarize(
     text: str,
-    extractive_model: str,
-    abstractive_model: str,
+    extractive_model: str = "distilbert-base-multilingual-cased",
+    abstractive_model: str = "airKlizz/mt5-base-wikinewssum-all-languages",
     device: int = -1,
     extractive_num_sentences: int = 13,
     extractive_min_lenght: int = 60,
