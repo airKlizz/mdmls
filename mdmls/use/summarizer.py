@@ -6,8 +6,8 @@ from summarizer import Summarizer as ExtSummarizer
 class Summarizer:
     def __init__(
         self,
-        extractive_model: str,
-        abstractive_model: str,
+        extractive_model: str = "distilbert-base-multilingual-cased",
+        abstractive_model: str =  "airKlizz/mt5-base-wikinewssum-all-languages",
         device: int = -1,
         
     ):
@@ -26,6 +26,7 @@ class Summarizer:
         )
 
     def __call__(
+        self,
         text: str,
         extractive_num_sentences: int = 13,
         extractive_min_lenght: int = 60,

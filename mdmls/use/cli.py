@@ -18,11 +18,8 @@ def summarize(
     no_repeat_ngram_size: int = 3,
 ) -> str:
     summarizer = Summarizer(extractive_model, abstractive_model, device)
-    return summarizer(
+    summary = summarizer(
         text,
-        extractive_num_sentences,
-        abstractive_model,
-        device,
         extractive_num_sentences,
         extractive_min_lenght,
         extractive_only,
@@ -31,6 +28,11 @@ def summarize(
         num_beams,
         no_repeat_ngram_size,
     )
+    print(f"Summary:\n\n{summary}")
+    return
+
+def main():
+    return app()
 
 if __name__ == "__main__":
     app()
