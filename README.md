@@ -189,3 +189,7 @@ Or directly using the CLI.
 ```bash
 mdmls "LONG_TEXT_TO_SUMMARIZE"
 ```
+
+## Models
+
+All the fine-tuned abstractive models are available on the HuggingFace Hub: https://huggingface.co/models?sort=downloads&search=airklizz+mt5+wikinewssum
