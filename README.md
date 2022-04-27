@@ -7,7 +7,7 @@ Code for the paper Generating Extended and Multilingual Summaries with Pre-train
 Create the environnement, activate and install requirements.
 
 ```bash
-conda create -n mdmls python=3.7
+conda create -n mdmls python=3.10
 conda activate mdmls
 pip install -r requirements.txt
 ```
@@ -77,7 +77,6 @@ Options:
                                   [default: push-to-hub]
   --language TEXT
   --max-number-training-sample INTEGER
-  --help                          Show this message and exit.
 ```
 
 | option                       | description                                                                                                                          |
@@ -188,6 +187,33 @@ Or directly using the CLI.
 
 ```bash
 mdmls "LONG_TEXT_TO_SUMMARIZE"
+```
+
+Details.
+
+```bash
+> mdmls --help
+Usage: mdmls [OPTIONS] TEXT
+
+Arguments:
+  TEXT  [required]
+
+Options:
+  --extractive-model TEXT         [default: distilbert-base-multilingual-
+                                  cased]
+  --abstractive-model TEXT        [default: airKlizz/mt5-base-wikinewssum-all-
+                                  languages]
+  --device INTEGER                [default: -1]
+  --extractive-num-sentences INTEGER
+                                  [default: 13]
+  --extractive-min-lenght INTEGER
+                                  [default: 60]
+  --extractive-only / --no-extractive-only
+                                  [default: no-extractive-only]
+  --min-length INTEGER            [default: 200]
+  --max-length INTEGER            [default: 512]
+  --num-beams INTEGER             [default: 5]
+  --no-repeat-ngram-size INTEGER  [default: 3]
 ```
 
 ## Models
